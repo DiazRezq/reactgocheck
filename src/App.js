@@ -7,11 +7,15 @@ function App() {
     setListItems((listItems) => [...listItems, item]);
   }
 
+  function handleDeleteItem(id) {
+    setListItems((listItems) => listItems.filter((item) => item.id !== id));
+  }
+
   return (
     <div className="app">
       <Logo />
       <Form onAddItem={handleAddItem} />
-      <Checklist items={listItems} />
+      <Checklist items={listItems} onDeleteItem={handleDeleteItem} />
       <Stats />
     </div>
   );
@@ -56,26 +60,26 @@ function Form({ onAddItem }) {
   );
 }
 
-function Checklist({ items }) {
+function Checklist({ items, onDeleteItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item key={item.id} item={item} />
+          <Item key={item.id} item={item} onDeleteItem={onDeleteItem} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeleteItem }) {
   return (
     <li key={item.id}>
       <input type="checkbox" />
       <span style={{ textDecoration: item.done ? "line-through" : "" }}>
         {item.title}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
