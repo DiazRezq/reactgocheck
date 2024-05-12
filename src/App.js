@@ -34,7 +34,7 @@ function App() {
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
       />
-      <Stats />
+      <Stats items={listItems} />
     </div>
   );
 }
@@ -78,22 +78,31 @@ function Form({ onAddItem }) {
   );
 }
 
-function Checklist({ items, onDeleteItem,onToggleItem }) {
+function Checklist({ items, onDeleteItem, onToggleItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item key={item.id} item={item} onDeleteItem={onDeleteItem} onToggleItem={onToggleItem} />
+          <Item
+            key={item.id}
+            item={item}
+            onDeleteItem={onDeleteItem}
+            onToggleItem={onToggleItem}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item, onDeleteItem,onToggleItem }) {
+function Item({ item, onDeleteItem, onToggleItem }) {
   return (
     <li key={item.id}>
-      <input type="checkbox" value={item.done} onChange={()=> onToggleItem(item.id)} />
+      <input
+        type="checkbox"
+        value={item.done}
+        onChange={() => onToggleItem(item.id)}
+      />
       <span style={{ textDecoration: item.done ? "line-through" : "" }}>
         {item.title}
       </span>
@@ -102,10 +111,25 @@ function Item({ item, onDeleteItem,onToggleItem }) {
   );
 }
 
-function Stats() {
+function Stats({ items }) {
+  if (items.length === 0) {
+    return (
+      <footer className="stats">
+        <span>Buat Aktivitas kamu sekarang ✏</span>
+      </footer>
+    );
+  }
+
+  const totalItem = items.length;
+  const doneItem = items.filter((item) => item.done).length;
+  const precentage = Math.round((doneItem / totalItem) * 100);
   return (
     <footer className="stats">
-      <span>kamu punya x catatan dan baru x yang dicheck (x)</span>
+      <span>
+        {precentage === 100
+          ? "kegiatan kamu selesai"
+          : `kamu punya ${totalItem} catatan dan baru ${doneItem} yang selesai (${precentage}%)`}
+      </span>
     </footer>
   );
 }
