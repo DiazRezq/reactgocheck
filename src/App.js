@@ -79,10 +79,26 @@ function Form({ onAddItem }) {
 }
 
 function Checklist({ items, onDeleteItem, onToggleItem }) {
+  const [sortBy, setSortBy] = useState("input");
+
+  function sortItems() {
+    switch (sortBy) {
+      case "title":
+        return items.slice().sort((a, b) => a.title.localeCompare(b.title));
+      case "status":
+        return items.slice().sort((a, b) => Number(a.done) - Number(b.done));
+      case "input":
+      default:
+        return items;
+    }
+  }
+
+  const sortedItem = sortItems();
+
   return (
     <div className="list">
       <ul>
-        {items.map((item) => (
+        {sortedItem.map((item) => (
           <Item
             key={item.id}
             item={item}
@@ -91,6 +107,13 @@ function Checklist({ items, onDeleteItem, onToggleItem }) {
           />
         ))}
       </ul>
+      <div className="actions">
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="input">urutkan berdasarkan Input</option>
+          <option value="title">urutkan berdasarkan Title</option>
+          <option value="status">urutkan berdasarkan Status</option>
+        </select>
+      </div>
     </div>
   );
 }
