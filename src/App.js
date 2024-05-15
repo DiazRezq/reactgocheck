@@ -25,6 +25,13 @@ function App() {
     });
   }
 
+  function handleClearItems() {
+    const confirm = window.confirm("are you sure to clear list?");
+    if (confirm) {
+      setListItems([]);
+    }
+  }
+
   return (
     <div className="app">
       <Logo />
@@ -33,6 +40,7 @@ function App() {
         items={listItems}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
+        onClearItems={handleClearItems}
       />
       <Stats items={listItems} />
     </div>
@@ -78,7 +86,7 @@ function Form({ onAddItem }) {
   );
 }
 
-function Checklist({ items, onDeleteItem, onToggleItem }) {
+function Checklist({ items, onDeleteItem, onToggleItem, onClearItems }) {
   const [sortBy, setSortBy] = useState("input");
 
   function sortItems() {
@@ -113,6 +121,7 @@ function Checklist({ items, onDeleteItem, onToggleItem }) {
           <option value="title">urutkan berdasarkan Title</option>
           <option value="status">urutkan berdasarkan Status</option>
         </select>
+        <button onClick={onClearItems}>Hapus</button>
       </div>
     </div>
   );
